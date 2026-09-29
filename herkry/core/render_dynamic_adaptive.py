@@ -1,20 +1,11 @@
 import math
-
 import torch
 import torch.nn as nn
-
 from herkry.core.render_backable import GaussianRenderer
 
 
 class AdaptiveDynamicGaussianRenderer(nn.Module):
-    """
-    Dynamic renderer for unconstrained Gaussian sigma.
-
-    It uses the same dynamic bin/sort renderer for training and inference. The
-    shape-specific configs are profiled separately because fixed 256x256 output
-    can still have very different optimal tile/chunk choices for different
-    Gaussian counts and channel counts.
-    """
+    """Dynamic renderer for unconstrained Gaussian sigma."""
 
     DEFAULT_TRAIN_CONFIGS = {
         (32, 24): (16, 16),
@@ -65,21 +56,21 @@ class AdaptiveDynamicGaussianRenderer(nn.Module):
     def _shape_key(gs_params):
         n = gs_params.shape[1]
         c = gs_params.shape[2] - 5
-        return int(math.isqrt(n)), c
+        return (int(math.isqrt(n)), c)
 
     def train_forward(self, gs_params, H=None, W=None, **kwargs):
         if not kwargs:
             kwargs = {}
             config = self.train_configs.get(self._shape_key(gs_params))
             if config is not None:
-                kwargs["tile_size"], kwargs["max_gauss_chunk"] = config
+                (kwargs["tile_size"], kwargs["max_gauss_chunk"]) = config
         return self.renderer(gs_params, H=H, W=W, **kwargs)
 
     def inference_forward(self, gs_params, H=None, W=None, **kwargs):
         if not kwargs:
             kwargs = {}
             config = self.inference_configs.get(self._shape_key(gs_params), self.train_config)
-            kwargs["tile_size"], kwargs["max_gauss_chunk"] = config
+            (kwargs["tile_size"], kwargs["max_gauss_chunk"]) = config
         return self.renderer(gs_params, H=H, W=W, **kwargs)
 
     def forward(self, gs_params, H=None, W=None, **kwargs):

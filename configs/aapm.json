@@ -1,153 +1,22 @@
 {
   "dataset": "aapm",
   "image_size": 256,
-  "stage_resolutions": [
-    32,
-    64,
-    128,
-    256
-  ],
-  "geometry": {
-    "det_count": 256,
-    "pixel_spacing": 1.4285,
-    "det_spacing": 1.2858
-  },
+  "stage_resolutions": [32, 64, 128, 256],
+  "geometry": {"det_count": 256, "pixel_spacing": 1.4285, "det_spacing": 1.2858},
   "cache_configs": {
-    "32": {
-      "direct": {
-        "tile_size": 8,
-        "max_gauss_chunk": 16
-      },
-      "direct_inference": {
-        "tile_size": 4,
-        "max_gauss_chunk": 8,
-        "support_sigma": 4.5
-      },
-      "brane": {
-        "tile_size": 4,
-        "max_gauss_chunk": 8,
-        "support_sigma": 4.5
-      },
-      "cgls": {
-        "tile_size": 32,
-        "max_gauss_chunk": 4,
-        "support_sigma": 4.5
-      }
-    },
-    "64": {
-      "direct": {
-        "tile_size": 8,
-        "max_gauss_chunk": 8
-      },
-      "direct_inference": {
-        "tile_size": 8,
-        "max_gauss_chunk": 4,
-        "support_sigma": 3.5
-      },
-      "brane": {
-        "tile_size": 8,
-        "max_gauss_chunk": 4,
-        "support_sigma": 3.5
-      },
-      "cgls": {
-        "tile_size": 16,
-        "max_gauss_chunk": 4,
-        "support_sigma": 3.5
-      }
-    },
-    "128": {
-      "direct": {
-        "tile_size": 4,
-        "max_gauss_chunk": 8
-      },
-      "direct_inference": {
-        "tile_size": 4,
-        "max_gauss_chunk": 4,
-        "support_sigma": 3.0
-      },
-      "brane": {
-        "tile_size": 4,
-        "max_gauss_chunk": 4,
-        "support_sigma": 3.0
-      },
-      "cgls": {
-        "tile_size": 16,
-        "max_gauss_chunk": 8,
-        "support_sigma": 3.0
-      }
-    },
-    "256": {
-      "direct": {
-        "tile_size": 4,
-        "max_gauss_chunk": 32
-      },
-      "direct_inference": {
-        "tile_size": 4,
-        "max_gauss_chunk": 32
-      },
-      "brane": {
-        "tile_size": 4,
-        "max_gauss_chunk": 16,
-        "support_sigma": 3.0
-      },
-      "cgls": {
-        "tile_size": 16,
-        "max_gauss_chunk": 8,
-        "support_sigma": 3.0
-      }
-    }
+    "32": {"direct": {"tile_size": 8, "max_gauss_chunk": 16}, "direct_inference": {"tile_size": 4, "max_gauss_chunk": 8, "support_sigma": 4.5}, "brane": {"tile_size": 4, "max_gauss_chunk": 8, "support_sigma": 4.5}, "cgls": {"tile_size": 32, "max_gauss_chunk": 4, "support_sigma": 4.5}},
+    "64": {"direct": {"tile_size": 8, "max_gauss_chunk": 8}, "direct_inference": {"tile_size": 8, "max_gauss_chunk": 4, "support_sigma": 3.5}, "brane": {"tile_size": 8, "max_gauss_chunk": 4, "support_sigma": 3.5}, "cgls": {"tile_size": 16, "max_gauss_chunk": 4, "support_sigma": 3.5}},
+    "128": {"direct": {"tile_size": 4, "max_gauss_chunk": 8}, "direct_inference": {"tile_size": 4, "max_gauss_chunk": 4, "support_sigma": 3.0}, "brane": {"tile_size": 4, "max_gauss_chunk": 4, "support_sigma": 3.0}, "cgls": {"tile_size": 16, "max_gauss_chunk": 8, "support_sigma": 3.0}},
+    "256": {"direct": {"tile_size": 4, "max_gauss_chunk": 32}, "direct_inference": {"tile_size": 4, "max_gauss_chunk": 32}, "brane": {"tile_size": 4, "max_gauss_chunk": 16, "support_sigma": 3.0}, "cgls": {"tile_size": 16, "max_gauss_chunk": 8, "support_sigma": 3.0}}
   },
   "full_hg_auxiliary_render": true,
-  "train_views": [
-    16,
-    24,
-    32,
-    48,
-    64
-  ],
-  "view_probabilities": [
-    0.3,
-    0.25,
-    0.2,
-    0.15,
-    0.1
-  ],
-  "eval_views": [
-    16,
-    32,
-    64
-  ],
+  "train_views": [16, 24, 32, 48, 64],
+  "view_probabilities": [0.3, 0.25, 0.2, 0.15, 0.1],
+  "eval_views": [16, 32, 64],
   "primary_val_view": 32,
-  "eval_depths": [
-    2,
-    4,
-    6,
-    8
-  ],
-  "train_depth_ranges": [
-    [
-      1,
-      3
-    ],
-    [
-      3,
-      5
-    ],
-    [
-      5,
-      7
-    ],
-    [
-      7,
-      9
-    ]
-  ],
-  "pre_cgls_stage_ratios": [
-    1,
-    0.5,
-    0.25,
-    0
-  ],
+  "eval_depths": [2, 4, 6, 8],
+  "train_depth_ranges": [[1, 3], [3, 5], [5, 7], [7, 9]],
+  "pre_cgls_stage_ratios": [1, 0.5, 0.25, 0],
   "stage_loss_ratio": 2,
   "batch_size": 8,
   "epochs": 50,

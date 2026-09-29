@@ -1,9 +1,8 @@
 """Public construction/loading API. Historical state-dict names are preserved."""
+
 import json
 from pathlib import Path
-
 import torch
-
 from .core.model import GCTCGLSTrajectoryContextUnrolled
 from .core.utils import fanbeam_gen
 from .training import set_stage_cgls_schedule
@@ -19,22 +18,21 @@ def build_model(config, device="cuda"):
     model = GCTCGLSTrajectoryContextUnrolled(
         render_size=config["image_size"],
         stage_resolutions=tuple(config["stage_resolutions"]),
-        blocks_per_stage=3, cgls_iterations=10, context_channels=12,
-        trajectory_sample_stride=2, use_persistent_feature=True,
-        learned_persistent_fusion=True, persistent_groups=2,
-        svct_factorized_moe=True, image_head_channels=7,
-        direct_amplitude_channels=8, parallel_cgls_base=True,
-        max_offset_cells=.75, anchor_offset_cells=.5,
-        stage_sigma_fractions=(.5, .45, .4, .35),
-        run_final_block_cgls=False, gaussian_stage_orders=(3, 2, 1, 0),
-        stage_independent_blocks=True, higher_order_cgls=True,
-        hermite_brane=True, kdelta_gru=True, kdelta_width=16,
-        variable_kdelta_trajectory=True, prune_inactive_hermite_heads=True,
-        hermite_shell_context=True, hermite_shell_nonlinear=True,
+        blocks_per_stage=3,
+        cgls_iterations=10,
+        context_channels=12,
+        trajectory_sample_stride=2,
+        persistent_groups=2,
+        image_head_channels=7,
+        direct_amplitude_channels=8,
+        max_offset_cells=0.75,
+        anchor_offset_cells=0.5,
+        stage_sigma_fractions=(0.5, 0.45, 0.4, 0.35),
+        run_final_block_cgls=False,
+        gaussian_stage_orders=(3, 2, 1, 0),
+        kdelta_width=16,
     ).to(device)
-    model.CACHE_CONFIGS = {int(k): v for k, v in config["cache_configs"].items()}
-    # AAPM/MSD use the live complete-HG auxiliary render. The historical LDCT
-    # run used the existing solver-initial render; preserve this distinction.
+    model.CACHE_CONFIGS = {int(k): v for (k, v) in config["cache_configs"].items()}
     for blocks in model.stage_blocks:
         for block in blocks:
             block.full_hg_auxiliary_render = config["full_hg_auxiliary_render"]
@@ -53,7 +51,9 @@ def load_checkpoint(model, path, *, trusted_legacy=False):
 def make_projector(config, views):
     geometry = config["geometry"]
     return fanbeam_gen(
-        (views, views), img_size=config["image_size"], bias=0,
+        (views, views),
+        img_size=config["image_size"],
+        bias=0,
         det_count=geometry["det_count"],
         pixel_spacing=geometry["pixel_spacing"],
         det_spacing=geometry["det_spacing"],
@@ -63,7 +63,8 @@ def make_projector(config, views):
 def reconstruct(model, sinogram, projector, *, return_aux=False):
     """Input [B,1,V,D]; outputs 12 native-grid visual states (not solver states)."""
     return model(
-        sinogram, {model.render_size: projector},
+        sinogram,
+        {model.render_size: projector},
         view_counts=sinogram.new_full((len(sinogram),), float(sinogram.shape[-2])),
         return_aux=return_aux,
     )
