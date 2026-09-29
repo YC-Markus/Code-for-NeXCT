@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "herkry"
+version = "0.1.0"
+description = "Hermite–Gaussian hierarchy with recurrent Krylov trajectory modeling for sparse-view CT"
+requires-python = ">=3.10"
+dependencies = ["torch>=2.7,<2.8", "torchvision>=0.22,<0.23", "triton>=3.3,<3.4", "numpy<3", "monai==1.5.1", "monai-generative==0.2.3"]
+
+[project.optional-dependencies]
+data = ["pydicom", "nibabel", "scipy"]
+
+[tool.setuptools.packages.find]
+include = ["herkry*"]
